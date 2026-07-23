@@ -1,0 +1,17 @@
+add_library(main_screen STATIC main_screen.hpp main_screen.cpp)
+target_link_libraries(main_screen PUBLIC ftxui::ftxui monitor_model monitor_controller monitor_tabs_view)
+
+add_library(monitor_box_preview STATIC monitor_box_preview.hpp monitor_box_preview.cpp)
+target_link_libraries(monitor_box_preview PUBLIC ftxui::ftxui monitor_model monitor_controller)
+
+add_library(monitor_panel_view STATIC monitor_panel_view.hpp monitor_panel_view.cpp)
+target_link_libraries(monitor_panel_view PUBLIC ftxui::ftxui monitor_model monitor_controller monitor_box_preview tweaks_panel_view)
+
+add_library(monitor_tabs_view STATIC monitor_tabs_view.hpp monitor_tabs_view.cpp)
+target_link_libraries(monitor_tabs_view PUBLIC ftxui::ftxui monitor_model monitor_controller monitor_panel_view monitor_info_view)
+
+add_library(monitor_info_view STATIC monitor_info_view.hpp monitor_info_view.cpp)
+target_link_libraries(monitor_info_view PUBLIC ftxui::ftxui monitor_model monitor_controller)
+
+add_library(tweaks_panel_view STATIC tweaks_panel_view.hpp tweaks_panel_view.cpp)
+target_link_libraries(tweaks_panel_view PUBLIC ftxui::ftxui monitor_model monitor_controller)

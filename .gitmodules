@@ -1,0 +1,6 @@
+[submodule "third-party/ftxui"]
+	path = third-party/ftxui
+	url = git@github.com:ArthurSonzogni/FTXUI.git
+[submodule "third-party/nlohmann-json"]
+	path = third-party/nlohmann-json
+	url = git@github.com:nlohmann/json.git
