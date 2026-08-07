@@ -4,6 +4,7 @@
 #include <mutex>
 
 #include "monitor.hpp"
+#include "monitor_query_builder.hpp"
 
 namespace monitor
 {
@@ -39,47 +40,45 @@ namespace monitor
 
     void MonitorController::Toggle(std::uint64_t monitor_id)
     {
-        Monitor monitor{};
+        Monitor monitor = GetMonitor(monitor_id);
 
-        {
-            std::lock_guard lock(mut_);
-
-            auto it = std::ranges::find(monitors_, monitor_id, &Monitor::id_);
-            monitor = *it;
-        }
-
-        auto req = std::format("eval hl.monitor({{output=\"{}\", disabled={}}})", monitor.name_, !monitor.disabled_);
-        hyprctl::SendRequest(req, socket_path_);
+        // clang-format off
+        auto query = MonitorQueryBuilder(monitor).WithMode()
+                                                 .WithPosition()
+                                                 .WithScale()
+                                                 .WithDisabled(!monitor.disabled_)
+                                                 .Build();
+        // clang-format on
+        hyprctl::SendRequest(query, socket_path_);
     }
 
     void MonitorController::SetMode(std::uint64_t monitor_id, std::string_view mode)
     {
-        Monitor monitor{};
+        Monitor monitor = GetMonitor(monitor_id);
 
-        {
-            std::lock_guard lock(mut_);
-
-            auto it = std::ranges::find(monitors_, monitor_id, &Monitor::id_);
-            monitor = *it;
-        }
-
-        std::string req =
-            std::format("eval hl.monitor({{output=\"{}\", mode=\"{}\", position=\"auto\", scale=1, disabled=false}})", monitor.name_, mode);
-
-        hyprctl::SendRequest(req, socket_path_);
+        // clang-format off
+        auto query = MonitorQueryBuilder(monitor).WithMode(mode)
+                                                 .WithPosition()
+                                                 .WithScale()
+                                                 .WithDisabled()
+                                                 .Build();
+        // clang-format on
+        hyprctl::SendRequest(query, socket_path_);
     }
 
-    /*
-     * Vrr is broken (probably).
-     */
-    void MonitorController::SetVrr(std::uint64_t monitor_id, bool value)
+    // NOLINTNEXTLINE
+    void MonitorController::SetScale(std::uint64_t monitor_id, double scale)
     {
-        (void)monitor_id;
-        (void)value;
-        // Monitor&    monitor = monitors_[monitor_id];
-        // std::string req     = std::format("eval hl.monitor({{output=\"{}\", vrr={}}})", monitor.name_, value);
+        Monitor monitor = GetMonitor(monitor_id);
 
-        // hyprctl::SendRequest(req, socket_path_);
+        // clang-format off
+        auto query = MonitorQueryBuilder(monitor).WithMode()
+                                                 .WithPosition()
+                                                 .WithScale(scale)
+                                                 .WithDisabled()
+                                                 .Build();
+        // clang-format on       
+        hyprctl::SendRequest(query, socket_path_);
     }
 
     Monitor MonitorController::GetMonitor(std::uint64_t monitor_id)

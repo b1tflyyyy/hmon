@@ -3,6 +3,7 @@
 #include <concepts>
 #include <cstdint>
 #include <mutex>
+#include <optional>
 
 #include "monitor.hpp"
 
@@ -28,11 +29,10 @@ namespace monitor
             bool HasFlag(UintType flag) { return static_cast<bool>(status_ & flag); }
 
         private:
-            // TODO: Rewr
-            template <std::convertible_to<UintType> AtLeastOneFlag, std::convertible_to<UintType>... Flags>
-            RefreshStatus(AtLeastOneFlag f1, Flags... flags)
+            template <std::convertible_to<UintType>... Flags>
+                requires(sizeof...(Flags) > 0)
+            explicit RefreshStatus(Flags... flags)
             {
-                status_ |= f1;
                 ((status_ |= flags), ...);
             }
 
@@ -50,10 +50,16 @@ namespace monitor
         RefreshStatusT Refresh();
         void           Toggle(std::uint64_t monitor_id);
         void           SetMode(std::uint64_t monitor_id, std::string_view mode);
-        void           SetVrr(std::uint64_t monitor_id, bool value);
+        void           SetScale(std::uint64_t monitor_id, double scale);
 
+        /*
+         *** Thread Safe ***
+         */
         Monitor GetMonitor(std::uint64_t monitor_id);
 
+        /*
+         *** Thread Safe ***
+         */
         std::vector<Monitor> Monitors();
 
     private:

@@ -5,8 +5,6 @@
 
 namespace monitor
 {
-    std::string Monitor::GetResolutionStr() const { return std::format("{}x{}@{}Hz", width_, height_, refresh_rate_); }
-
     Monitor Monitor::ParseMonitor(const nlohmann::json& item)
     {
         Monitor mon;
@@ -20,6 +18,9 @@ namespace monitor
         mon.physical_width_  = item.value("physicalWidth", -1);
         mon.physical_height_ = item.value("physicalHeight", -1);
         mon.refresh_rate_    = item.value("refreshRate", -1.0);
+        mon.x_pos_           = item.value("x", -1);
+        mon.y_pos_           = item.value("y", -1);
+        mon.scale_           = item.value("scale", -1.0);
         mon.vrr_             = item.value("vrr", false);
         mon.disabled_        = item.value("disabled", false);
         mon.current_format_  = item.value("currentFormat", "undefined");
