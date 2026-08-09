@@ -6,6 +6,7 @@
 
 #include <cstdlib>
 #include <format>
+#include <utils/defer.hpp>
 
 namespace hyprctl
 {
@@ -31,20 +32,19 @@ namespace hyprctl
             throw std::runtime_error("failed to create socket");
         }
 
-        sockaddr_un addr{};
+        utils::Defer socket_defer([fd]() noexcept -> void { close(fd); });
+        sockaddr_un  addr{};
 
         addr.sun_family = AF_UNIX;
         std::ranges::copy(path, addr.sun_path);
 
         if (connect(fd, reinterpret_cast<sockaddr*>(std::addressof(addr)), sizeof(addr)) == -1)
         {
-            close(fd);  // todo: remove
             throw std::runtime_error("failed to connect to socket");
         }
 
         if (write(fd, std::data(request), std::size(request)) == -1)
         {
-            close(fd);  // todo:
             throw std::runtime_error("failed to write to socket");
         }
 
@@ -54,7 +54,6 @@ namespace hyprctl
             throw std::runtime_error("failed to read response from socket");
         }
 
-        close(fd);
         return std::string(std::from_range, buffer);
     }
 }  // namespace hyprctl

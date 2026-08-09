@@ -40,7 +40,7 @@ namespace ui
                     info_view.Render() | ftxui::flex  
                 }),
                 tweaks_panel_->Component()->Render() | ftxui::flex
-            });
+            }) | ftxui::flex;
         });
         // clang-format on
     }

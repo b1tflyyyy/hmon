@@ -5,7 +5,6 @@
 
 namespace ui
 {
-
     class TweaksPanelView
     {
     public:
@@ -23,9 +22,9 @@ namespace ui
         int                      selected_mode_;
         std::vector<std::string> available_modes_;
 
-        bool onoff_state_;
+        bool          onoff_state_;
+        std::uint32_t scale_;
 
         ftxui::Component root_;
     };
-
 }  // namespace ui

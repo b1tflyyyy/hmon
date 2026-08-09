@@ -10,13 +10,19 @@ namespace ui
     class MainScreen
     {
     public:
+        MainScreen();
+
         int Run();
 
     private:
-        void StartRefreshThread(ftxui::ScreenInteractive& screen);
+        void RefreshMonitorsInfo();
+
+        void StartRefreshThread();
         void StopRefreshThread();
 
     private:
+        ftxui::ScreenInteractive screen_;
+
         monitor::MonitorController controller_;
         std::atomic<bool>          refresh_running_;
 
