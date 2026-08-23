@@ -23,6 +23,8 @@
             hardeningDisable = [ "all" ];
 
             nativeBuildInputs = with pkgs; [
+              llvm.bintools
+              llvm.llvm
               llvm.lldb
               llvm.clang-tools
               mold
