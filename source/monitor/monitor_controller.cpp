@@ -1,5 +1,6 @@
 #include "monitor_controller.hpp"
 
+#include <hypr/config_generator.hpp>
 #include <hypr/hyprctl.hpp>
 #include <mutex>
 
@@ -8,7 +9,7 @@
 
 namespace monitor
 {
-    MonitorController::MonitorController() : socket_path_(hyprctl::GetSocketPath()) {}
+    MonitorController::MonitorController() : socket_path_(hypr::hyprctl::GetSocketPath()) {}
 
     MonitorController::RefreshStatusT MonitorController::Refresh()
     {
@@ -17,7 +18,7 @@ namespace monitor
 
         try
         {
-            std::string response = hyprctl::SendRequest("j/monitors all", socket_path_);
+            std::string response = hypr::hyprctl::SendRequest("j/monitors all", socket_path_);
             new_monitors         = Monitor::ParseMonitors(response);
         }
         // TODO
@@ -49,7 +50,7 @@ namespace monitor
                                                  .WithDisabled(!monitor.disabled_)
                                                  .Build();
         // clang-format on
-        hyprctl::SendRequest(query, socket_path_);
+        hypr::hyprctl::SendRequest(query, socket_path_);
     }
 
     void MonitorController::SetMode(std::uint64_t monitor_id, std::string_view mode)
@@ -63,7 +64,7 @@ namespace monitor
                                                  .WithDisabled()
                                                  .Build();
         // clang-format on
-        hyprctl::SendRequest(query, socket_path_);
+        hypr::hyprctl::SendRequest(query, socket_path_);
     }
 
     // NOLINTNEXTLINE
@@ -77,8 +78,14 @@ namespace monitor
                                                  .WithScale(scale)
                                                  .WithDisabled()
                                                  .Build();
-        // clang-format on       
-        hyprctl::SendRequest(query, socket_path_);
+        // clang-format on
+        hypr::hyprctl::SendRequest(query, socket_path_);
+    }
+
+    std::string MonitorController::GenerateConfig()
+    {
+        auto monitors = Monitors();
+        return hypr::cfg_autogen::GenerateLua(monitors);
     }
 
     Monitor MonitorController::GetMonitor(std::uint64_t monitor_id)

@@ -8,7 +8,7 @@
 #include <format>
 #include <utils/defer.hpp>
 
-namespace hyprctl
+namespace hypr::hyprctl
 {
     std::string GetSocketPath()
     {
@@ -56,4 +56,4 @@ namespace hyprctl
 
         return std::string(std::from_range, buffer);
     }
-}  // namespace hyprctl
+}  // namespace hypr::hyprctl

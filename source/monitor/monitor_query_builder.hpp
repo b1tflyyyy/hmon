@@ -18,7 +18,6 @@ namespace monitor
                                           std::optional<std::uint32_t> y_pos = std::nullopt);
 
         MonitorQueryBuilder& WithScale(std::optional<double> scale = std::nullopt);
-        // MonitorQueryBuilder& WithVrr(std::optional<bool> vrr = std::nullopt); vrr is broken
         MonitorQueryBuilder& WithDisabled(std::optional<bool> disabled = std::nullopt);
 
         std::string Build();

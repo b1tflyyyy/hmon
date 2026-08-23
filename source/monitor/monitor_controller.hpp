@@ -51,9 +51,11 @@ namespace monitor
         void           Toggle(std::uint64_t monitor_id);
         void           SetMode(std::uint64_t monitor_id, std::string_view mode);
         void           SetScale(std::uint64_t monitor_id, double scale);
+        std::string    GenerateConfig();
 
         /*
          *** Thread Safe ***
+         * Note: Rename "GetMonitor" -> "Monitor"
          */
         Monitor GetMonitor(std::uint64_t monitor_id);
 
