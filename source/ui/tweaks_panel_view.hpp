@@ -25,6 +25,9 @@ namespace ui
         bool          onoff_state_;
         std::uint32_t scale_;
 
+        bool        show_modal_;
+        std::string cfg_generated_path_;
+
         ftxui::Component root_;
     };
 }  // namespace ui

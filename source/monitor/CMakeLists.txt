@@ -2,7 +2,7 @@ add_library(monitor_model STATIC monitor.hpp monitor.cpp)
 target_link_libraries(monitor_model PUBLIC nlohmann_json)
 
 add_library(monitor_controller STATIC monitor_controller.hpp monitor_controller.cpp)
-target_link_libraries(monitor_controller PUBLIC monitor_model hyprctl monitor_query_builder)
+target_link_libraries(monitor_controller PUBLIC monitor_model hyprctl config_generator monitor_query_builder)
 
 add_library(monitor_query_builder STATIC monitor_query_builder.hpp monitor_query_builder.cpp)
 target_link_libraries(monitor_query_builder PUBLIC monitor_model hyprctl)
